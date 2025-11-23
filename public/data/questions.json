@@ -1,0 +1,148 @@
+{
+  "arithmetic": [
+    {
+      "id": "arith_001",
+      "topic": "arithmetic",
+      "difficulty": 1,
+      "question": "다리를 건설하려면 목재가 필요합니다. 왼쪽에 12개, 오른쪽에 8개가 있습니다. 총 몇 개일까요?",
+      "answer": 20,
+      "hints": [
+        "두 개의 수를 더해야 합니다.",
+        "12 + 8 = ?",
+        "10 + 10 = 20이고, 2 - 2 = 0입니다."
+      ],
+      "visualData": null
+    },
+    {
+      "id": "arith_002",
+      "topic": "arithmetic",
+      "difficulty": 1,
+      "question": "몬스터에게 데미지를 주려면 15 - 7을 계산하세요.",
+      "answer": 8,
+      "hints": [
+        "15에서 7을 빼야 합니다.",
+        "10에서 7을 빼면 3이 남고, 5를 더하면...",
+        "15 - 7 = 8"
+      ],
+      "visualData": null
+    },
+    {
+      "id": "arith_003",
+      "topic": "arithmetic",
+      "difficulty": 2,
+      "question": "마법 주문을 완성하려면 6 × 4를 계산하세요.",
+      "answer": 24,
+      "hints": [
+        "6을 4번 더하는 것과 같습니다.",
+        "6 + 6 + 6 + 6 = ?",
+        "6 × 4 = 24"
+      ],
+      "visualData": null
+    },
+    {
+      "id": "arith_004",
+      "topic": "arithmetic",
+      "difficulty": 2,
+      "question": "아이템을 나눠 가지려고 합니다. 20개의 물약을 4명이 똑같이 나누면 한 명당 몇 개일까요?",
+      "answer": 5,
+      "hints": [
+        "나눗셈 문제입니다.",
+        "20 ÷ 4 = ?",
+        "4 × 5 = 20이므로, 답은 5입니다."
+      ],
+      "visualData": null
+    },
+    {
+      "id": "arith_005",
+      "topic": "arithmetic",
+      "difficulty": 3,
+      "question": "복잡한 마법진을 풀려면: (12 + 8) × 3 - 15 = ?",
+      "answer": 45,
+      "hints": [
+        "괄호부터 계산하세요.",
+        "(12 + 8) = 20, 그 다음 20 × 3 = ?",
+        "60 - 15 = 45"
+      ],
+      "visualData": null
+    }
+  ],
+  "geometry": [
+    {
+      "id": "geom_001",
+      "topic": "geometry",
+      "difficulty": 2,
+      "question": "정사각형 타워의 한 변이 5m입니다. 둘레는 몇 m일까요?",
+      "answer": 20,
+      "hints": [
+        "정사각형은 네 변이 모두 같습니다.",
+        "둘레 = 한 변 × 4",
+        "5 × 4 = 20"
+      ],
+      "visualData": {
+        "shape": "square",
+        "side": 5
+      }
+    },
+    {
+      "id": "geom_002",
+      "topic": "geometry",
+      "difficulty": 2,
+      "question": "직사각형 방의 가로가 8m, 세로가 6m입니다. 넓이는 몇 m²일까요?",
+      "answer": 48,
+      "hints": [
+        "직사각형의 넓이 = 가로 × 세로",
+        "8 × 6 = ?",
+        "8 × 6 = 48"
+      ],
+      "visualData": {
+        "shape": "rectangle",
+        "width": 8,
+        "height": 6
+      }
+    },
+    {
+      "id": "geom_003",
+      "topic": "geometry",
+      "difficulty": 3,
+      "question": "원형 방어벽의 반지름이 7m입니다. 둘레(원주)는 약 몇 m일까요? (π = 3.14)",
+      "answer": 43.96,
+      "hints": [
+        "원주 = 2 × π × 반지름",
+        "2 × 3.14 × 7 = ?",
+        "6.28 × 7 = 43.96"
+      ],
+      "visualData": {
+        "shape": "circle",
+        "radius": 7
+      }
+    }
+  ],
+  "measurement": [
+    {
+      "id": "meas_001",
+      "topic": "measurement",
+      "difficulty": 1,
+      "question": "목적지까지 500m를 시속 100m/분으로 이동합니다. 몇 분 걸릴까요?",
+      "answer": 5,
+      "hints": [
+        "시간 = 거리 ÷ 속력",
+        "500 ÷ 100 = ?",
+        "500 ÷ 100 = 5"
+      ],
+      "visualData": null
+    },
+    {
+      "id": "meas_002",
+      "topic": "measurement",
+      "difficulty": 2,
+      "question": "물약 1병이 250ml입니다. 1L를 만들려면 몇 병이 필요할까요?",
+      "answer": 4,
+      "hints": [
+        "1L = 1000ml",
+        "1000 ÷ 250 = ?",
+        "1000 ÷ 250 = 4"
+      ],
+      "visualData": null
+    }
+  ]
+}
