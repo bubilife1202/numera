@@ -6,6 +6,7 @@ import { useRef, useEffect } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { Mesh, Vector3 } from 'three';
 import { useGameStore } from '../../stores/gameStore';
+import { useInteractionStore } from '../../stores/interactionStore';
 
 export default function Player() {
   const meshRef = useRef<Mesh>(null);
@@ -13,6 +14,11 @@ export default function Player() {
   const currentPosition = useRef(new Vector3(0, 0, 0));
 
   const { player, updatePlayer } = useGameStore();
+  const { setNearbyInteractable, nearbyInteractable } = useInteractionStore();
+
+  // NPC 위치 (오일러)
+  const npcPosition = new Vector3(-5, 1, 0);
+  const interactionDistance = 2.0; // 상호작용 가능 거리
 
   // 키보드 입력 처리
   useEffect(() => {
@@ -37,6 +43,15 @@ export default function Player() {
         case 'arrowright':
           newPos.x += moveSpeed;
           break;
+        case 'e':
+          // E키: 상호작용
+          if (nearbyInteractable) {
+            // 상호작용 이벤트 발생 (CustomEvent 사용)
+            window.dispatchEvent(new CustomEvent('interact', {
+              detail: { interactable: nearbyInteractable }
+            }));
+          }
+          return;
         default:
           return;
       }
@@ -59,9 +74,9 @@ export default function Player() {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [updatePlayer]);
+  }, [updatePlayer, nearbyInteractable]);
 
-  // 부드러운 이동 애니메이션
+  // 부드러운 이동 애니메이션 및 NPC 근접 감지
   useFrame(() => {
     if (meshRef.current) {
       currentPosition.current.lerp(targetPosition.current, 0.1);
@@ -75,6 +90,26 @@ export default function Player() {
       if (direction.length() > 0.01) {
         const angle = Math.atan2(direction.x, direction.z);
         meshRef.current.rotation.y = angle;
+      }
+
+      // NPC와의 거리 확인
+      const distanceToNPC = currentPosition.current.distanceTo(npcPosition);
+
+      if (distanceToNPC <= interactionDistance) {
+        // NPC 근처에 있음 - 상호작용 가능
+        if (!nearbyInteractable) {
+          setNearbyInteractable({
+            id: 'npc_euler',
+            type: 'npc',
+            name: '오일러',
+            position: { x: npcPosition.x, y: npcPosition.y, z: npcPosition.z },
+          });
+        }
+      } else {
+        // NPC에서 멀어짐 - 상호작용 불가
+        if (nearbyInteractable) {
+          setNearbyInteractable(null);
+        }
       }
     }
   });

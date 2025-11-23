@@ -4,10 +4,12 @@
  */
 
 import { useGameStore } from '../../stores/gameStore';
-import { Coins, Star, TrendingUp } from 'lucide-react';
+import { useInteractionStore } from '../../stores/interactionStore';
+import { Coins, Star, TrendingUp, Sparkles } from 'lucide-react';
 
 export default function HUD() {
   const { player, progress } = useGameStore();
+  const { nearbyInteractable } = useInteractionStore();
 
   // XP 진행률 계산 (현재 레벨 기준)
   const currentLevelXP = (player.level - 1) ** 2 * 100;
@@ -89,21 +91,38 @@ export default function HUD() {
         </div>
       </div>
 
-      {/* 하단 중앙: 조작 가이드 */}
+      {/* 하단 중앙: 조작 가이드 또는 상호작용 프롬프트 */}
       <div className="absolute bottom-4 left-1/2 -translate-x-1/2 hud-element">
-        <div className="bg-surface/80 backdrop-blur-sm rounded-lg px-6 py-3 shadow-lg border border-primary/20">
-          <div className="flex gap-6 text-sm text-gray-300">
-            <div>
-              <span className="text-primary font-semibold">WASD</span> 이동
-            </div>
-            <div>
-              <span className="text-primary font-semibold">E</span> 상호작용
-            </div>
-            <div>
-              <span className="text-primary font-semibold">ESC</span> 메뉴
+        {nearbyInteractable ? (
+          /* 상호작용 가능 표시 */
+          <div className="bg-warning/90 backdrop-blur-sm rounded-lg px-6 py-3 shadow-lg border-2 border-warning pulse-glow">
+            <div className="flex items-center gap-3 text-background">
+              <Sparkles size={20} className="animate-pulse" />
+              <div>
+                <div className="font-bold">{nearbyInteractable.name}와 대화하기</div>
+                <div className="text-sm">
+                  <span className="font-bold">E</span> 키를 눌러 상호작용
+                </div>
+              </div>
+              <Sparkles size={20} className="animate-pulse" />
             </div>
           </div>
-        </div>
+        ) : (
+          /* 기본 조작 가이드 */
+          <div className="bg-surface/80 backdrop-blur-sm rounded-lg px-6 py-3 shadow-lg border border-primary/20">
+            <div className="flex gap-6 text-sm text-gray-300">
+              <div>
+                <span className="text-primary font-semibold">WASD</span> 이동
+              </div>
+              <div>
+                <span className="text-primary font-semibold">E</span> 상호작용
+              </div>
+              <div>
+                <span className="text-primary font-semibold">ESC</span> 메뉴
+              </div>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* 현재 난이도 */}

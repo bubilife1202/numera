@@ -12,6 +12,7 @@ interface GameStore extends GameState {
   addXP: (amount: number) => void;
   addCurrency: (amount: number) => void;
   spendCurrency: (amount: number) => boolean;
+  recordProblemAttempt: (topic: import('../types').MathTopic, isCorrect: boolean) => void;
   completeQuest: (questId: string) => void;
   unlockRegion: (regionId: string) => void;
   updateDifficulty: (level: DifficultyLevel) => void;
@@ -117,6 +118,28 @@ export const useGameStore = create<GameStore>()(
         }
         return false;
       },
+
+      recordProblemAttempt: (topic, isCorrect) =>
+        set((state) => {
+          const newStats = { ...state.player.stats };
+          newStats.totalProblemsAttempted += 1;
+          if (isCorrect) {
+            newStats.totalCorrect += 1;
+          }
+
+          // 주제별 정확도 업데이트 (간단한 이동 평균)
+          const currentAccuracy = newStats.accuracyByTopic[topic] || 0;
+          const weight = 0.3; // 새로운 시도의 가중치
+          newStats.accuracyByTopic[topic] = currentAccuracy * (1 - weight) + (isCorrect ? 100 : 0) * weight;
+
+          return {
+            player: {
+              ...state.player,
+              stats: newStats,
+            },
+            lastSaved: Date.now(),
+          };
+        }),
 
       completeQuest: (questId) =>
         set((state) => ({
