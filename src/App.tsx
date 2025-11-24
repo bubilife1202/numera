@@ -2,79 +2,22 @@
  * 누메라 메인 애플리케이션
  */
 
-import { useEffect, useState, useRef } from 'react';
-import GameCanvas from './components/game/GameCanvas';
+import { useRef } from 'react';
+import PhaserGame from './components/game/PhaserGame';
 import HUD from './components/ui/HUD';
 import MathProblemUI from './components/ui/MathProblem';
 import { useInteractionStore } from './stores/interactionStore';
 import { useGameStore } from './stores/gameStore';
 import { adjustDifficulty } from './systems/adaptive/difficultyAdjuster';
-import type { MathProblem, MathTopic } from './types';
 import './App.css';
 
 function App() {
-  const { currentProblem, showProblem, closeProblem } = useInteractionStore();
+  const { currentProblem, closeProblem } = useInteractionStore();
   const { addXP, addCurrency, recordProblemAttempt, updateDifficulty, player, progress } = useGameStore();
-  const [problemBank, setProblemBank] = useState<Record<MathTopic, MathProblem[]>>({
-    arithmetic: [],
-    geometry: [],
-    measurement: [],
-    patterns: [],
-    probability: [],
-  });
 
   // 최근 시도 결과 추적 (최대 10개)
   const recentAttempts = useRef<boolean[]>([]);
 
-  // 문제 은행 로드
-  useEffect(() => {
-    fetch('/data/questions.json')
-      .then((res) => res.json())
-      .then((data) => setProblemBank(data))
-      .catch((err) => console.error('Failed to load questions:', err));
-  }, []);
-
-  // 상호작용 이벤트 리스닝
-  useEffect(() => {
-    const handleInteract = (event: Event) => {
-      const customEvent = event as CustomEvent;
-      const { interactable } = customEvent.detail;
-
-      if (interactable.id === 'npc_euler') {
-        // NPC 오일러와 상호작용 - 랜덤 수학 문제 제시
-        const randomProblem = getRandomProblem();
-        if (randomProblem) {
-          showProblem(randomProblem);
-        }
-      }
-    };
-
-    window.addEventListener('interact', handleInteract);
-    return () => window.removeEventListener('interact', handleInteract);
-  }, [problemBank, showProblem]);
-
-  // 랜덤 문제 선택 (현재 난이도에 맞춰)
-  const getRandomProblem = (): MathProblem | null => {
-    const availableTopics: MathTopic[] = ['arithmetic', 'geometry', 'measurement'];
-    const randomTopic = availableTopics[Math.floor(Math.random() * availableTopics.length)];
-    const topicProblems = problemBank[randomTopic];
-
-    if (!topicProblems || topicProblems.length === 0) return null;
-
-    // 현재 난이도에 맞는 문제 필터링 (±1 난이도 허용)
-    const suitableProblems = topicProblems.filter(
-      (p) =>
-        p.difficulty >= progress.difficultyLevel - 1 &&
-        p.difficulty <= progress.difficultyLevel + 1
-    );
-
-    if (suitableProblems.length === 0) {
-      // 적절한 난이도가 없으면 전체에서 랜덤
-      return topicProblems[Math.floor(Math.random() * topicProblems.length)];
-    }
-
-    return suitableProblems[Math.floor(Math.random() * suitableProblems.length)];
-  };
 
   // 문제 정답 시 보상
   const handleCorrectAnswer = () => {
@@ -138,8 +81,8 @@ function App() {
 
   return (
     <div className="w-full h-screen overflow-hidden bg-background">
-      {/* 3D 게임 캔버스 */}
-      <GameCanvas />
+      {/* 2D Phaser 게임 캔버스 */}
+      <PhaserGame />
 
       {/* 게임 HUD (체력, XP, 화폐 등) */}
       <HUD />
